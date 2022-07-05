@@ -1,0 +1,11 @@
+include dash_ifc/dash_ifc.min.js
+include dash_ifc/dash_ifc.min.js.map
+include dash_ifc/async-*.js
+include dash_ifc/async-*.js.map
+include dash_ifc/*-shared.js
+include dash_ifc/*-shared.js.map
+include dash_ifc/metadata.json
+include dash_ifc/package-info.json
+include README.md
+include LICENSE
+include package.json
