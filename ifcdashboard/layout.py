@@ -27,7 +27,7 @@ class IfcLayout:
             ]),
             dbc.Row([
                 dbc.Col(html.Div("User inputs go here")),
-                dbc.Col(dash_ifc.DashIfc("ifc_component", "IFC Viewer", "test")),
+                dbc.Col(dash_ifc.DashIfc("ifc_viewer", r"https://raw.githubusercontent.com/IFCjs/web-ifc-viewer/master/example/test.ifc")),
             ])
 
         ])

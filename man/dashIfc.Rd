@@ -6,19 +6,17 @@
 \title{DashIfc component}
 
 \description{
-ExampleComponent is an example component. It takes a property, `label`, and displays it. It renders an input with the property `value` which is editable by the user.
+
 }
 
 \usage{
-dashIfc(id=NULL, label=NULL, value=NULL)
+dashIfc(id=NULL, url=NULL)
 }
 
 \arguments{
-\item{id}{Character. The ID used to identify this component in Dash callbacks.}
+\item{id}{Character. The ID used to identify the container for the IFC viewer component.}
 
-\item{label}{Character. A label that will be printed when this component is rendered.}
-
-\item{value}{Character. The value displayed in the input.}
+\item{url}{Character. The url for where the IFC file is hosted.}
 }
 
 \value{named list of JSON elements corresponding to React.js properties and their values}

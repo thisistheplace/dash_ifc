@@ -1,61 +1,154 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { DashIfcViewer } from './DashIfcViewer.react';
 
-/**
- * ExampleComponent is an example component.
- * It takes a property, `label`, and
- * displays it.
- * It renders an input with the property `value`
- * which is editable by the user.
- */
 export default class DashIfc extends Component {
-    render() {
-        const {id, label, setProps, value} = this.props;
-
-        return (
-            <div id={id}>
-                ExampleComponent: {label}&nbsp;
-                <input
-                    value={value}
-                    onChange={
-                        /*
-                         * Send the new value to the parent component.
-                         * setProps is a prop that is automatically supplied
-                         * by dash's front-end ("dash-renderer").
-                         * In a Dash app, this will update the component's
-                         * props and send the data back to the Python Dash
-                         * app server if a callback uses the modified prop as
-                         * Input or State.
-                         */
-                        e => setProps({ value: e.target.value })
-                    }
-                />
-            </div>
-        );
+    constructor(props) {
+      super(props);
+      this.getRef = this.getRef.bind(this);
     }
-}
+    
+    componentDidMount() {
+      DashIfcViewer.create(this.props.id, this.props.url);
+    }
+       
+    render() {
+      return (
+        <div ref={el => this.el = el} />
+      );
+    }
+};
 
 DashIfc.defaultProps = {};
 
 DashIfc.propTypes = {
     /**
-     * The ID used to identify this component in Dash callbacks.
+     * The ID used to identify the container for the IFC viewer component.
      */
     id: PropTypes.string,
 
     /**
-     * A label that will be printed when this component is rendered.
+     * The url for where the IFC file is hosted.
      */
-    label: PropTypes.string.isRequired,
-
-    /**
-     * The value displayed in the input.
-     */
-    value: PropTypes.string,
-
-    /**
-     * Dash-assigned callback that should be called to report property changes
-     * to Dash, to make them available for callbacks.
-     */
-    setProps: PropTypes.func
+    url: PropTypes.string.isRequired,
 };
+
+// import './App.css';
+// import { IfcViewerAPI } from 'web-ifc-viewer';
+// import { Backdrop, CircularProgress, IconButton } from '@material-ui/core';
+// import React from 'react';
+// import Dropzone from 'react-dropzone';
+// import BcfDialog from './components/BcfDialog';
+
+// //Icons
+// import FolderOpenOutlinedIcon from '@material-ui/icons/FolderOpenOutlined';
+// import CropIcon from '@material-ui/icons/Crop';
+// import FeedbackOutlinedIcon from '@material-ui/icons/FeedbackOutlined';
+
+// class App extends React.Component {
+
+//     state = {
+//         bcfDialogOpen: false,
+//         loaded: false,
+//         loading_ifc: false
+//     };
+
+//     constructor(props) {
+//         super(props);
+//         this.dropzoneRef = React.createRef();
+//     }
+
+//     componentDidMount() {
+//         const container = document.getElementById('viewer-container');
+//         const viewer = new IfcViewerAPI({container});
+//         viewer.addAxes();
+//         viewer.addGrid();
+//         viewer.IFC.setWasmPath('../../');
+
+//         this.viewer = viewer;
+
+//         window.onmousemove = viewer.prepickIfcItem;
+//         window.ondblclick = viewer.addClippingPlane
+//     }
+
+//     onDrop = async (files) => {
+//         this.setState({ loading_ifc: true })
+//         await this.viewer.IFC.loadIfc(files[0], true);
+//         this.setState({ loaded: true, loading_ifc: false })
+//     };
+
+//     handleToggleClipping = () => {
+//         this.viewer.clipper.active = !this.viewer.clipper.active;
+//     };
+
+//     handleClickOpen = () => {
+//         this.dropzoneRef.current.open();
+//     };
+
+//     handleOpenBcfDialog = () => {
+//         this.setState({
+//             ...this.state,
+//             bcfDialogOpen: true
+//         });
+//     };
+
+//     handleCloseBcfDialog = () => {
+//         this.setState({
+//             ...this.state,
+//             bcfDialogOpen: false
+//         });
+//     };
+
+//     handleOpenViewpoint = (viewpoint) => {
+//         this.viewer.currentViewpoint = viewpoint;
+//     };
+
+//     render() {
+//         return (
+//           <>
+//               <BcfDialog
+//                 open={this.state.bcfDialogOpen}
+//                 onClose={this.handleCloseBcfDialog}
+//                 onOpenViewpoint={this.handleOpenViewpoint}
+//               />
+//               <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
+//                   <aside style={{ width: 50 }}>
+//                       <IconButton onClick={this.handleClickOpen}>
+//                           <FolderOpenOutlinedIcon />
+//                       </IconButton>
+//                       <IconButton onClick={this.handleToggleClipping}>
+//                           <CropIcon />
+//                       </IconButton>
+//                     {/*  <IconButton onClick={this.handleOpenBcfDialog}>
+//                           <FeedbackOutlinedIcon />
+//                       </IconButton>*/}
+//                   </aside>
+//                   <Dropzone ref={this.dropzoneRef} onDrop={this.onDrop}>
+//                       {({ getRootProps, getInputProps }) => (
+//                         <div {...getRootProps({ className: 'dropzone' })}>
+//                             <input {...getInputProps()} />
+//                         </div>
+//                       )}
+//                   </Dropzone>
+//                   <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+//                       <div id='viewer-container' style={{ position: 'relative', height: '100%', width: '100%' }} />
+//                   </div>
+//               </div>
+//               <Backdrop
+//                 style={{
+//                     zIndex: 100,
+//                     display: "flex",
+//                     alignItems: "center",
+//                     alignContent: "center"
+//                 }}
+//                 open={this.state.loading_ifc}
+//               >
+//                   <CircularProgress/>
+//               </Backdrop>
+//           </>
+//         );
+//     }
+// }
+
+// export default App;
+
