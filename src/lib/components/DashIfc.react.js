@@ -19,7 +19,8 @@ export default class DashIfc extends Component {
         const viewer = new IfcViewerAPI({container});
         viewer.addAxes();
         viewer.addGrid();
-        viewer.IFC.setWasmPath('../../');
+        console.log("set wasm path");
+        //viewer.IFC.setWasmPath('assets/');
 
         this.viewer = viewer;
         this.loadifc();
