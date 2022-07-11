@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { DashIfcViewer } from './DashIfcViewer.react';
+// import './App.css';
+// import { IfcViewerAPI } from 'web-ifc-viewer';
+// import { Backdrop, CircularProgress, IconButton } from '@material-ui/core';
+// import React from 'react';
+// import Dropzone from 'react-dropzone';
+// import BcfDialog from './components/BcfDialog';
 
 export default class DashIfc extends Component {
     constructor(props) {
@@ -32,13 +38,6 @@ DashIfc.propTypes = {
      */
     url: PropTypes.string.isRequired,
 };
-
-// import './App.css';
-// import { IfcViewerAPI } from 'web-ifc-viewer';
-// import { Backdrop, CircularProgress, IconButton } from '@material-ui/core';
-// import React from 'react';
-// import Dropzone from 'react-dropzone';
-// import BcfDialog from './components/BcfDialog';
 
 // //Icons
 // import FolderOpenOutlinedIcon from '@material-ui/icons/FolderOpenOutlined';
