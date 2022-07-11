@@ -1,29 +1,67 @@
+// import './App.css';
+import { IfcViewerAPI } from 'web-ifc-viewer';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { DashIfcViewer } from './DashIfcViewer.react';
-// import './App.css';
-// import { IfcViewerAPI } from 'web-ifc-viewer';
-// import { Backdrop, CircularProgress, IconButton } from '@material-ui/core';
-// import React from 'react';
-// import Dropzone from 'react-dropzone';
-// import BcfDialog from './components/BcfDialog';
 
 export default class DashIfc extends Component {
+
+    state = {
+        loaded: false,
+        loading_ifc: false
+    };
+
     constructor(props) {
-      super(props);
-      this.getRef = this.getRef.bind(this);
+        super(props);
     }
-    
+
     componentDidMount() {
-      DashIfcViewer.create(this.props.id, this.props.url);
+        const container = document.getElementById(this.props.id);
+        const viewer = new IfcViewerAPI({container});
+        viewer.addAxes();
+        viewer.addGrid();
+        viewer.IFC.setWasmPath('../../');
+
+        this.viewer = viewer;
+        this.loadifc();
+
+        window.onmousemove = viewer.prepickIfcItem;
+        window.ondblclick = viewer.addClippingPlane
     }
-       
+
+    handleToggleClipping = () => {
+        this.viewer.clipper.active = !this.viewer.clipper.active;
+    };
+
+    handleOpenViewpoint = (viewpoint) => {
+        this.viewer.currentViewpoint = viewpoint;
+    };
+
+    loadifc(){
+      this.loader();
+    }
+
+    loader = async() => {
+      this.setState({ loading_ifc: true });
+      console.log(this.props.ifc_file_contents.slice(0, 100));
+      console.log("loading blob");
+      var blob = new Blob([this.props.ifc_file_contents], { type: 'text/plain', endings: "native" });
+      console.log(blob);
+      console.log("creating file");
+      const ifc_file = new File([blob], "file.ifc");
+      console.log(ifc_file);
+      console.log("loading");
+      await this.viewer.IFC.loadIfc(ifc_file, true);
+      console.log("loaded");
+      this.setState({ loaded: true, loading_ifc: false })
+    }
+
     render() {
-      return (
-        <div ref={el => this.el = el} />
-      );
+        const {id, ifc_file_contents} = this.props;
+        return (
+          <div id={id} style={{ position: 'relative', height: '100%', width: '100%' }} />
+        );
     }
-};
+}
 
 DashIfc.defaultProps = {};
 
@@ -34,120 +72,7 @@ DashIfc.propTypes = {
     id: PropTypes.string,
 
     /**
-     * The url for where the IFC file is hosted.
+     * The contents of the ifc file
      */
-    url: PropTypes.string.isRequired,
+     ifc_file_contents: PropTypes.string.isRequired,
 };
-
-// //Icons
-// import FolderOpenOutlinedIcon from '@material-ui/icons/FolderOpenOutlined';
-// import CropIcon from '@material-ui/icons/Crop';
-// import FeedbackOutlinedIcon from '@material-ui/icons/FeedbackOutlined';
-
-// class App extends React.Component {
-
-//     state = {
-//         bcfDialogOpen: false,
-//         loaded: false,
-//         loading_ifc: false
-//     };
-
-//     constructor(props) {
-//         super(props);
-//         this.dropzoneRef = React.createRef();
-//     }
-
-//     componentDidMount() {
-//         const container = document.getElementById('viewer-container');
-//         const viewer = new IfcViewerAPI({container});
-//         viewer.addAxes();
-//         viewer.addGrid();
-//         viewer.IFC.setWasmPath('../../');
-
-//         this.viewer = viewer;
-
-//         window.onmousemove = viewer.prepickIfcItem;
-//         window.ondblclick = viewer.addClippingPlane
-//     }
-
-//     onDrop = async (files) => {
-//         this.setState({ loading_ifc: true })
-//         await this.viewer.IFC.loadIfc(files[0], true);
-//         this.setState({ loaded: true, loading_ifc: false })
-//     };
-
-//     handleToggleClipping = () => {
-//         this.viewer.clipper.active = !this.viewer.clipper.active;
-//     };
-
-//     handleClickOpen = () => {
-//         this.dropzoneRef.current.open();
-//     };
-
-//     handleOpenBcfDialog = () => {
-//         this.setState({
-//             ...this.state,
-//             bcfDialogOpen: true
-//         });
-//     };
-
-//     handleCloseBcfDialog = () => {
-//         this.setState({
-//             ...this.state,
-//             bcfDialogOpen: false
-//         });
-//     };
-
-//     handleOpenViewpoint = (viewpoint) => {
-//         this.viewer.currentViewpoint = viewpoint;
-//     };
-
-//     render() {
-//         return (
-//           <>
-//               <BcfDialog
-//                 open={this.state.bcfDialogOpen}
-//                 onClose={this.handleCloseBcfDialog}
-//                 onOpenViewpoint={this.handleOpenViewpoint}
-//               />
-//               <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
-//                   <aside style={{ width: 50 }}>
-//                       <IconButton onClick={this.handleClickOpen}>
-//                           <FolderOpenOutlinedIcon />
-//                       </IconButton>
-//                       <IconButton onClick={this.handleToggleClipping}>
-//                           <CropIcon />
-//                       </IconButton>
-//                     {/*  <IconButton onClick={this.handleOpenBcfDialog}>
-//                           <FeedbackOutlinedIcon />
-//                       </IconButton>*/}
-//                   </aside>
-//                   <Dropzone ref={this.dropzoneRef} onDrop={this.onDrop}>
-//                       {({ getRootProps, getInputProps }) => (
-//                         <div {...getRootProps({ className: 'dropzone' })}>
-//                             <input {...getInputProps()} />
-//                         </div>
-//                       )}
-//                   </Dropzone>
-//                   <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-//                       <div id='viewer-container' style={{ position: 'relative', height: '100%', width: '100%' }} />
-//                   </div>
-//               </div>
-//               <Backdrop
-//                 style={{
-//                     zIndex: 100,
-//                     display: "flex",
-//                     alignItems: "center",
-//                     alignContent: "center"
-//                 }}
-//                 open={this.state.loading_ifc}
-//               >
-//                   <CircularProgress/>
-//               </Backdrop>
-//           </>
-//         );
-//     }
-// }
-
-// export default App;
-

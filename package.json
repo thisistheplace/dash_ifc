@@ -24,6 +24,7 @@
   "author": "BeanCanDesign <bean.can.design@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/icons": "^4.11.3",
     "ramda": "^0.26.1",
     "web-ifc-viewer": "^1.0.207"
   },

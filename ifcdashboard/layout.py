@@ -3,6 +3,8 @@ import dash
 from dash import html
 import dash_bootstrap_components as dbc
 
+from ifcdashboard.fileutils import read_file
+
 class IfcLayout:
     
     def __init__(self):
@@ -27,7 +29,7 @@ class IfcLayout:
             ]),
             dbc.Row([
                 dbc.Col(html.Div("User inputs go here")),
-                dbc.Col(dash_ifc.DashIfc("ifc_viewer", r"https://raw.githubusercontent.com/IFCjs/web-ifc-viewer/master/example/test.ifc")),
+                dbc.Col(dash_ifc.DashIfc("ifc_viewer", read_file("test.ifc"))),
             ])
 
         ])

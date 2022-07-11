@@ -2,7 +2,43 @@
   "src/lib/components/DashIfc.react.js": {
     "description": "",
     "displayName": "DashIfc",
-    "methods": [],
+    "methods": [
+      {
+        "name": "handleToggleClipping",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "handleOpenViewpoint",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "viewpoint",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "loadifc",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "loader",
+        "docblock": null,
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": {
       "id": {
         "type": {
@@ -11,12 +47,12 @@
         "required": false,
         "description": "The ID used to identify the container for the IFC viewer component."
       },
-      "url": {
+      "ifc_file_contents": {
         "type": {
           "name": "string"
         },
         "required": true,
-        "description": "The url for where the IFC file is hosted."
+        "description": "The contents of the ifc file"
       }
     }
   }
