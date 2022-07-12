@@ -1,17 +1,33 @@
 // import './App.css';
 import { IfcViewerAPI } from 'web-ifc-viewer';
-import React, {Component} from 'react';
+import React, {Component, setState} from 'react';
 import PropTypes from 'prop-types';
 
 export default class DashIfc extends Component {
 
-    state = {
-        loaded: false,
-        loading_ifc: false
-    };
-
     constructor(props) {
         super(props);
+        this.state = {
+            ifc_data: props.ifc_file_contents
+        }
+        this.handleFileUpdate = this.handleFileUpdate.bind(this);
+        this.loadifc = this.loadifc.bind(this);
+        this.loader = this.loader.bind(this);
+    }
+
+    componentDidUpdate(prevProps){
+        const {ifc_file_contents} = this.props;
+        if (ifc_file_contents !== prevProps.ifc_file_contents){
+            this.handleFileUpdate();
+        }
+    }
+
+    handleFileUpdate(){
+        const {ifc_file_contents} = this.props;
+        console.log(ifc_file_contents);
+        console.log("updating the viewer");
+        // Update the viewer
+        this.loadifc();
     }
 
     componentDidMount() {
@@ -19,47 +35,29 @@ export default class DashIfc extends Component {
         const viewer = new IfcViewerAPI({container});
         viewer.addAxes();
         viewer.addGrid();
-        console.log("set wasm path");
-        //viewer.IFC.setWasmPath('assets/');
+        viewer.IFC.setWasmPath('../../');
 
         this.viewer = viewer;
-        this.loadifc();
 
         window.onmousemove = viewer.prepickIfcItem;
         window.ondblclick = viewer.addClippingPlane
     }
 
-    handleToggleClipping = () => {
-        this.viewer.clipper.active = !this.viewer.clipper.active;
-    };
-
-    handleOpenViewpoint = (viewpoint) => {
-        this.viewer.currentViewpoint = viewpoint;
-    };
-
     loadifc(){
-      this.loader();
+        console.log("in loader")
+        this.loader();
     }
 
     loader = async() => {
-      this.setState({ loading_ifc: true });
-      console.log(this.props.ifc_file_contents.slice(0, 100));
-      console.log("loading blob");
-      var blob = new Blob([this.props.ifc_file_contents], { type: 'text/plain', endings: "native" });
-      console.log(blob);
-      console.log("creating file");
-      const ifc_file = new File([blob], "file.ifc");
-      console.log(ifc_file);
-      console.log("loading");
-      await this.viewer.IFC.loadIfc(ifc_file, true);
-      console.log("loaded");
-      this.setState({ loaded: true, loading_ifc: false })
+        console.log("loading subset")
+        var blob = new Blob([this.props.ifc_file_contents], { type: 'text/plain', endings: "native" });
+        const ifc_file = new File([blob], "file.ifc");
+        await this.viewer.IFC.loadIfc(ifc_file, true);
     }
 
     render() {
-        const {id, ifc_file_contents} = this.props;
         return (
-          <div id={id} style={{ position: 'relative', height: '100%', width: '100%' }} />
+          <div id={this.props.id} style={{ position: 'relative', height: '100%', width: '100%' }} />
         );
     }
 }
