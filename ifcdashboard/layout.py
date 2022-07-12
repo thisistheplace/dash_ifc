@@ -3,7 +3,7 @@ import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from ifcdashboard.fileutils import read_file
+from .constants import IFC_TYPES
 
 class IfcLayout:
     
@@ -19,33 +19,59 @@ class IfcLayout:
         """
         app.layout = self._layout
 
-
     def setup_layout(self) -> dbc.Container:
         layout = dbc.Container([
             dcc.ConfirmDialog(
                 id='confirm-upload',
             ),
-            html.Div([html.Div("Dash IFC viewer")], style={"padding":"20px"}),
+            # dcc.Store stores the intermediate value
+            dcc.Store(id='ifc_data'),
+            html.Div(
+                [html.Div("Dash / IFC.js viewer")],
+                style={
+                    "padding":"40px",
+                    "font-size": "40px"
+                }
+            ),
             dbc.Row([
                 dbc.Col(
-                    dcc.Upload(
-                        id='upload-data',
-                        children=html.Div([
-                            'Drag and Drop or ',
-                            html.A('Select File')
-                        ]),
-                        style={
-                            'width': '100%',
-                            'height': '60px',
-                            'lineHeight': '60px',
-                            'borderWidth': '1px',
-                            'borderStyle': 'dashed',
-                            'borderRadius': '5px',
-                            'textAlign': 'center',
-                        },
-                    ),
+                    [
+                        dcc.Upload(
+                            id='upload-data',
+                            children=html.Div([
+                                'Drag and Drop or ',
+                                html.A('Select File')
+                            ]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                            },
+                        ),
+                        dbc.DropdownMenu(
+                            children=[dbc.DropdownMenuItem(key, id=key) for key in ["All"] + IFC_TYPES],
+                            id="dropdown",
+                            label="Select Product",
+                            style={
+                                "padding":"40px",
+                                "padding-left":"0px"
+                            }
+                        ),
+                        html.Div([
+                            dcc.Graph(
+                                id='radar',
+                                figure={
+                                    'data': [],
+                                }
+                            )
+                        ])
+                    ],
                     style={"padding":"20px"},
-                    width=2
+                    width=4
                 ),
                 dbc.Col(
                     dash_ifc.DashIfc("ifc_viewer", ""),
@@ -55,10 +81,14 @@ class IfcLayout:
             ], 
             className="g-0",
             style={
-                "height": "90vh",
+                "height": "80vh",
                 "width": "95vw",
                 "padding": "20px"
             })
 
-        ])
+        ],
+        style={
+            "maxWidth": "100vw"
+        }
+        )
         return layout

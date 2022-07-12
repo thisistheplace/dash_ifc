@@ -7,7 +7,7 @@ from .fileutils import read_wasm
 from .layout import IfcLayout
 
 server = Flask('my_app')
-app = dash.Dash(server=server, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(server=server, external_stylesheets=[dbc.themes.SIMPLEX])
 api = Api(server)
 
 class WasmFile(Resource):
