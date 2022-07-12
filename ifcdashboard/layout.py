@@ -25,12 +25,10 @@ class IfcLayout:
             dcc.ConfirmDialog(
                 id='confirm-upload',
             ),
+            html.Div([html.Div("Dash IFC viewer")], style={"padding":"20px"}),
             dbc.Row([
-                dbc.Col(html.Div("Dash IFC viewer")),
-                dbc.Col(html.Div("IFC viewer")),
-            ]),
-            dbc.Row([
-                dbc.Col(dcc.Upload(
+                dbc.Col(
+                    dcc.Upload(
                         id='upload-data',
                         children=html.Div([
                             'Drag and Drop or ',
@@ -44,12 +42,23 @@ class IfcLayout:
                             'borderStyle': 'dashed',
                             'borderRadius': '5px',
                             'textAlign': 'center',
-                            'margin': '10px'
                         },
-                    )
+                    ),
+                    style={"padding":"20px"},
+                    width=2
                 ),
-                dbc.Col(dash_ifc.DashIfc("ifc_viewer", read_file("test.ifc"))),
-            ])
+                dbc.Col(
+                    dash_ifc.DashIfc("ifc_viewer", ""),
+                    style={"padding":"20px"},
+                    width=8
+                ),
+            ], 
+            className="g-0",
+            style={
+                "height": "90vh",
+                "width": "95vw",
+                "padding": "20px"
+            })
 
         ])
         return layout
