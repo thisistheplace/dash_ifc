@@ -1,8 +1,4 @@
 import base64
-import io
-
-from dash import html
-
 from pathlib import Path
 
 def read_file(fpath: str) -> str:

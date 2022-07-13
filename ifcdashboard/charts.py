@@ -18,7 +18,7 @@ def radar_chart(ifc_data: pd.DataFrame):
         ),
         showlegend=False
     )
-    return fig
+    return fig 
 
 def histogram(ifc_data: pd.DataFrame, column=None):
     fig = go.Figure()
