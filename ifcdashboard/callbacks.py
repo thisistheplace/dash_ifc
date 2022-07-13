@@ -1,10 +1,7 @@
-from re import S
 from dash import no_update, callback_context
 from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
 
-import time
+import uuid
 
 from .app import app, cache
 from .charts import radar_chart, histogram
@@ -28,17 +25,17 @@ def get_ifc_data(session_id, ifc_data=None, delete=False):
 @app.callback(Output('confirm-upload', 'message'),
             Output('confirm-upload', 'displayed'),
             Output("ifc_viewer", "ifc_file_contents"),
-            Output('data-updated', 'children'),
+            Output('session-id', 'data'),
             Input('upload-data', 'contents'),
-            Input('session-id', 'data'),
             State('upload-data', 'filename'),
             prevent_initial_call=True)
-def update_output(file_contents, session_id, filename):
+def update_output(file_contents, filename):
+    session_id = str(uuid.uuid4())
     try:
         ifc_data = parse_contents(file_contents, filename)
         # reset data in cache
         _ = get_ifc_data(session_id, ifc_data, True)
-        return "", False, ifc_data, ""
+        return "", False, ifc_data, session_id
     except Exception as e:
         raise e
         return str(e), True, no_update, no_update
@@ -46,21 +43,19 @@ def update_output(file_contents, session_id, filename):
 @app.callback(Output('radar', 'figure'),
     Output("dropdown", "label"),
     Input('session-id', 'data'),
-    Input('data-updated', 'children'),
     [Input(key.replace(" ", "_"), "n_clicks") for key in ["All"] + IFC_TYPES],
     prevent_initial_call=True)
-def update_figure(session_id, upload_success, *args):
+def update_figure(session_id, *args):
     ctx = callback_context
 
     if not ctx.triggered:
         button_id = "All"
     else:
         button_id = ctx.triggered[0]["prop_id"].split(".")[0]
-    if button_id == "data-updated":
+    if button_id == "session-id":
         button_id = "All"
     
     # load ifc data
-    tstart = time.time()
     ifc_file = get_ifc_data(session_id)
 
     if button_id != "All" and "OverallHeight" in ifc_file.get_product(button_id).columns.values:

@@ -3,14 +3,11 @@ import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-import uuid
-
 from .constants import IFC_TYPES
 
 class IfcLayout:
     
     def __init__(self):
-        self._session_id = str(uuid.uuid4())
         self._layout = self.setup_layout()
 
     def apply_layout(self, app: dash.Dash) -> None:
@@ -31,7 +28,7 @@ class IfcLayout:
                 id='data-updated',
             ),
             # dcc.Store stores the intermediate value
-            dcc.Store(data=self._session_id, id='session-id'),
+            dcc.Store(id='session-id'),
             html.Div(
                 [html.Div([
                     dcc.Link("Dash", href="https://dash.plotly.com/"),
