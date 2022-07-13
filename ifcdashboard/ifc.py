@@ -2,6 +2,7 @@ from typing import DefaultDict
 import ifcopenshell
 from collections import defaultdict
 import pandas as pd
+import time
 
 from .constants import IFC_TYPES
 
@@ -26,7 +27,9 @@ class IfcProducts:
 
 class IfcFile:
     def __init__(self, ifc_str):
+        now = time.time()
         self._file = ifcopenshell.file.from_string(ifc_str)
+        print(f"Loading time: {time.time() - now}")
         self._products = self.load_products()
 
     def load_products(self):
@@ -40,7 +43,7 @@ class IfcFile:
         """ Dataframe of product counts in IFC data """
         products = {}
         for prod_type in IFC_TYPES:
-            products[prod_type] = [len(self._file.by_type(prod_type))]
+            products[prod_type] = [len(self._products[prod_type].data)]
         return pd.DataFrame.from_dict(products)
     
     def get_product(self, prod_type: str) -> pd.DataFrame:
