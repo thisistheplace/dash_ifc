@@ -38,7 +38,7 @@ class IfcLayout:
                 ])],
                 style={
                     "padding":"40px",
-                    "font-size": "40px"
+                    "fontSize": "40px"
                 }
             ),
             dbc.Row([
@@ -66,7 +66,7 @@ class IfcLayout:
                             label="Select Product",
                             style={
                                 "padding":"40px",
-                                "padding-left":"0px"
+                                "paddingLeft":"0px"
                             }
                         ),
                         html.Div([

@@ -24,8 +24,6 @@ export default class DashIfc extends Component {
 
     handleFileUpdate(){
         const {ifc_file_contents} = this.props;
-        console.log(ifc_file_contents);
-        console.log("updating the viewer");
         // Update the viewer
         this.loadifc();
     }
@@ -36,6 +34,11 @@ export default class DashIfc extends Component {
         viewer.addAxes();
         viewer.addGrid();
         viewer.IFC.setWasmPath('../../');
+        viewer.IFC.loader.ifcManager.applyWebIfcConfig({
+            USE_FAST_BOOLS: true,
+            COORDINATE_TO_ORIGIN: true
+          });
+        viewer.context.renderer.postProduction.active = true;
 
         this.viewer = viewer;
 
@@ -44,12 +47,10 @@ export default class DashIfc extends Component {
     }
 
     loadifc(){
-        console.log("in loader")
         this.loader();
     }
 
     loader = async() => {
-        console.log("loading subset")
         var blob = new Blob([this.props.ifc_file_contents], { type: 'text/plain', endings: "native" });
         const ifc_file = new File([blob], "file.ifc");
         await this.viewer.IFC.loadIfc(ifc_file, true);
