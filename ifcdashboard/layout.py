@@ -27,7 +27,12 @@ class IfcLayout:
             # dcc.Store stores the intermediate value
             dcc.Store(id='ifc_data'),
             html.Div(
-                [html.Div("Dash / IFC.js viewer")],
+                [html.Div([
+                    dcc.Link("Dash", href="https://dash.plotly.com/"),
+                    " / ",
+                    dcc.Link("IFC.js", href="https://ifcjs.github.io/info/"),
+                    " viewer"
+                ])],
                 style={
                     "padding":"40px",
                     "font-size": "40px"

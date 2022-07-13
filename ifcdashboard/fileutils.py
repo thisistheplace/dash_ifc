@@ -25,4 +25,4 @@ def parse_contents(contents: bytes, filename: str) -> str:
     if 'ifc' in filename.lower():
         return decoded.decode('utf-8')
     else:
-        raise TypeError("Only .ifc file extensions supported")
+        raise TypeError("Only .IFC file extensions are supported!")
