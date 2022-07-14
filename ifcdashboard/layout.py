@@ -72,8 +72,8 @@ class IfcLayout:
                         html.Div([
                             dcc.Graph(
                                 id='radar',
-                                figure={
-                                    'data': [],
+                                style={
+                                    'background': '#fcfcfc'
                                 }
                             )
                         ])

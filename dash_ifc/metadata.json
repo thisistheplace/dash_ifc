@@ -11,6 +11,20 @@
         "returns": null
       },
       {
+        "name": "startLoading",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "stopLoading",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
         "name": "loadifc",
         "docblock": null,
         "modifiers": [],
@@ -18,7 +32,7 @@
         "returns": null
       },
       {
-        "name": "loader",
+        "name": "ifcloader",
         "docblock": null,
         "modifiers": [
           "async"

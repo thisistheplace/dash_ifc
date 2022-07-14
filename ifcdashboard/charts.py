@@ -7,7 +7,7 @@ def radar_chart(ifc_data: pd.DataFrame):
             r=ifc_data.values[0],
             theta=ifc_data.columns.values,
             fill='toself'
-        )
+        ),
     )
 
     fig.update_layout(
@@ -16,7 +16,7 @@ def radar_chart(ifc_data: pd.DataFrame):
             visible=True
             ),
         ),
-        showlegend=False
+        showlegend=False,
     )
     return fig 
 

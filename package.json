@@ -24,8 +24,10 @@
   "author": "BeanCanDesign <bean.can.design@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.9.3",
     "@material-ui/icons": "^4.11.3",
     "ramda": "^0.26.1",
+    "react-spinners": "^0.13.3",
     "web-ifc": "^0.0.35",
     "web-ifc-viewer": "^1.0.207"
   },

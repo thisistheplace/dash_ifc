@@ -2,17 +2,21 @@
 import { IfcViewerAPI } from 'web-ifc-viewer';
 import React, {Component, setState} from 'react';
 import PropTypes from 'prop-types';
+import Loader from './../utils/loader';
 
 export default class DashIfc extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            ifc_data: props.ifc_file_contents
+            ifc_data: props.ifc_file_contents,
+            loading: "hidden"
         }
         this.handleFileUpdate = this.handleFileUpdate.bind(this);
         this.loadifc = this.loadifc.bind(this);
-        this.loader = this.loader.bind(this);
+        this.ifcloader = this.ifcloader.bind(this);
+        this.startLoading = this.startLoading.bind(this);
+        this.stopLoading = this.stopLoading.bind(this);
     }
 
     componentDidUpdate(prevProps){
@@ -26,6 +30,14 @@ export default class DashIfc extends Component {
         const {ifc_file_contents} = this.props;
         // Update the viewer
         this.loadifc();
+    }
+
+    startLoading(){
+        setState({loading : "block"});
+    }
+
+    stopLoading(){
+        setState({loading : "hidden"});
     }
 
     componentDidMount() {
@@ -47,10 +59,12 @@ export default class DashIfc extends Component {
     }
 
     loadifc(){
-        this.loader();
+        this.startLoading();
+        this.ifcloader();
+        this.stopLoading();
     }
 
-    loader = async() => {
+    ifcloader = async() => {
         var blob = new Blob([this.props.ifc_file_contents], { type: 'text/plain', endings: "native" });
         const ifc_file = new File([blob], "file.ifc");
         await this.viewer.IFC.loadIfc(ifc_file, true);
@@ -58,7 +72,22 @@ export default class DashIfc extends Component {
 
     render() {
         return (
-          <div id={this.props.id} style={{ position: 'relative', height: '100%', width: '100%' }} />
+            <div style={{height: '100%', width: '100%'}}>
+                <div className="loader">
+                    <Loader/>
+                </div>
+                <div id={this.props.id} style={{ position: 'absolute', height: '100%', width: '100%' }} />
+                <style jsx>{`
+                    .loader {
+                        display: ${this.state.loading};
+                        position: absolute;
+                        z-index: 3;
+                        background: #fcfcfc;
+                        width: 100%;
+                        height: 100%;
+                    }
+                `}</style>
+            </div>
         );
     }
 }
